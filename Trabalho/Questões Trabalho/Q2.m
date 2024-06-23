@@ -36,9 +36,9 @@ alph = 10^(15.7/20);
 tau = 1/(0.1*2.85);
 
 %Sistema compensado com controlador de atraso de fase
+figure(2)
 D = K * (tau*s+1)/(alph*tau*s+1);
 margin(D*sys)
-figure(2)
 
 %teste de sobressalto
 figure(3)

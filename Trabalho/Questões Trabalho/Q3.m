@@ -35,7 +35,7 @@ B = [0 ; 0 ; 1];
 C = [50 0 0];
 
 %Operações matriciais para construção do sistema (slides aula 16)
-P = [-20+1i*34.64 -20-1i*34.64 -50 ];
+P = [-20+1i*34.64 -20-1i*34.64 -50.5 ];
 K= place(A,B,P);
 I=eye(size(A));
 MJ=C*inv(-A+B*K)*B;

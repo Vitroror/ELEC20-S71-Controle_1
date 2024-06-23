@@ -24,15 +24,19 @@ zpk(sys)
 
 % polos e zeros
 pole(sys)
+
 %lugar das raízes
 figure(1);
 rlocus(sys)
+grid on;
+
 %Critério de estabilidade de routh Hurwitz
 K = 1;
 K_crit = 27.49;
 sys_fb = feedback((K_crit)*sys,1)
 figure(2)
 step(sys_fb)
+grid on;
 
 
 %Constante de erro
