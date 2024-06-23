@@ -68,14 +68,12 @@ step(sys_fb_c)
 
 %Por isso, decidimos criar um pseudo-PID
 %e, das características do pseudo-PID
-%achar uma expressão para um PID que
-%tenha um comportamento prox do pseudo
-
+%achar uma expressão para 
 %tentativa 2:
 %utilizando controlSystemDesigner() e na
 %tentativa e erro
 %foi possível chegar na seguinte expressão
-%para o pseudo-PID com as especificações desejadas:
+%para o compensador com as especificações desejadas:
 %Cm = 0.0075205*(0.2*s+1)*(1+2*10^3*s)/(s*(1+0.001*s))
 %utilizando Cm como base, foi possível projetar
 % o seguinte PID:
