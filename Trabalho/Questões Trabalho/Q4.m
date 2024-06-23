@@ -37,7 +37,7 @@ wcf = 15.8;
 
 %achar o K utilizando G
 G = -28.8;
-K = 10^(-G/20)
+K = 10^(-G/20);
 %comparando com o K_routh, foi decidido utilizar 
 %o próprio K_routh
 Kr = 27.49;
@@ -79,21 +79,21 @@ step(sys_fb_c)
 %Cm = 0.0075205*(0.2*s+1)*(1+2*10^3*s)/(s*(1+0.001*s))
 %utilizando Cm como base, foi possível projetar
 % o seguinte PID:
-a1 = 3.008*1000
-a2 = 15.04*1000
-a3 = 0.007521*1000
-b1 = 1000
+a1 = 3.008*1000;
+a2 = 15.04*1000;
+a3 = 0.007521*1000;
+b1 = 1000;
 
 %a1, a2, a3, b1 são coeficientes dos polinomios
 %do numerador e do denominador de Cm
 %que quando escritos em termos de Kp, Ki, Kd:
 
-Kpm = (-a3+a2*b1)/(b1^2)
-Kim = a3/b1
-Kdm = (a3-a2*b1+a1*(b1^2))/(b1^3)
+Kpm = (-a3+a2*b1)/(b1^2);
+Kim = a3/b1;
+Kdm = (a3-a2*b1+a1*(b1^2))/(b1^3);
 
 %daqui, equacionamos o PID:
-Cm1 = Kpm + Kim/s + Kdm*s
+Cm1 = Kpm + Kim/s + Kdm*s;
 sys_fb_cm1 = feedback(Cm1*sys, 1);
 
 %comparação gráfica das duas malhas fechadas
@@ -112,3 +112,5 @@ MJ=C*inv(-A+B*K)*B;
 J=1/MJ;
 controller=ss(A-B*K, B*J,C,[]);
 step(controller, "red")
+stepinfo(sys_fb_cm1)
+stepinfo(controller)
