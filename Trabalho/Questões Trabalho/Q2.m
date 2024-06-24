@@ -21,7 +21,7 @@ s = tf('s');
 sys = (10*5)/(s*(s+5)*(0.1*s+5));
 
 %ganho arbitrário
-K = 11;
+K = 2.15;
 %margem máxima usando a margem desejada
 phi = 50 + 7;
 
@@ -29,15 +29,15 @@ zpk(sys)
 
 %diagrama de Bode do sistema descompensado
 figure(1)
-margin(K*sys)
+margin(sys)
 
 %determinação dos parâmetros de fase
-alph = 10^(15.7/20);
-tau = 1/(0.1*2.85);
+alph = 10^(1.94/20);
+tau = 1/(0.1*2.8);
 
 %Sistema compensado com controlador de atraso de fase
 figure(2)
-D = K * (tau*s+1)/(alph*tau*s+1);
+D = K * alph * (tau*s+1)/(alph*tau*s+1);
 margin(D*sys)
 
 %teste de sobressalto
