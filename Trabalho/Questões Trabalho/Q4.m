@@ -29,8 +29,8 @@ sys = (10*5)/(s*(s+5)*(0.1*s+5));
 
 %Tentativa 1:
 %ver a freq de cruzamento
-margin(sys)
 figure(1)
+margin(sys)
 
 %frequência de cruzamento de fase obtida observando o gráfico
 wcf = 15.8;
@@ -47,60 +47,56 @@ Tu = 2*pi/wcf;
 Kp = 0.6*Kr;
 Ki = 2*Kp/Tu;
 Kd = Kp*Tu/8;
-C = Kp + Ki/s + Kd*s;
+Cont1 = Kp + Ki/s + Kd*s;
 
 %fechamento da malha
-sys_fb_c = feedback(C*sys, 1);
+sys_cont1 = feedback(Cont1*sys, 1);
 sys_fb = feedback(sys, 1);
 sys_crit_fb = feedback(sys*(Kr), 1);
 
-%comparação entre a malha fechada do
-%sistema sem o controlador (vermelho)
-%e com o controlador
-
-step(sys_fb, "red")
+%comparação entre os PIDS será feita nessa figura
+figure(2)
+step(sys_cont1, "red")
 hold on
-step(sys_fb_c)
+stepinfo(sys_cont1)
 
 %por este método, podemos ver que o
 %overshooting e o tempo de assentamento
 %não foram cumpridas.
 
-%Por isso, decidimos criar um pseudo-PID
-%e, das características do pseudo-PID
-%achar uma expressão para um PID que
-%tenha um comportamento prox do pseudo
+%vamos para mais tentativas com diferentes ajustes
 
-%tentativa 2:
-%utilizando controlSystemDesigner() e na
-%tentativa e erro
-%foi possível chegar na seguinte expressão
-%para o pseudo-PID com as especificações desejadas:
-%Cm = 0.0075205*(0.2*s+1)*(1+2*10^3*s)/(s*(1+0.001*s))
-%utilizando Cm como base, foi possível projetar
-% o seguinte PID:
-a1 = 3.008*1000;
-a2 = 15.04*1000;
-a3 = 0.007521*1000;
-b1 = 1000;
+%Parâmetros tabelados da tabela de Ziegler-Nichols ajustados para
+%sobressinal reduzido
+Kp2 = Kr/3;
+Ki2 = Kp/(0.5*Tu);
+Kd2 = Kp*Tu/3;
+Cont2 = Kp2 + Ki2/s + Kd2*s;
 
-%a1, a2, a3, b1 são coeficientes dos polinomios
-%do numerador e do denominador de Cm
-%que quando escritos em termos de Kp, Ki, Kd:
+%tentando novamente...
+sys_cont2 = feedback(Cont2*sys, 1);
+step(sys_cont2, "green")
 
-Kpm = (-a3+a2*b1)/(b1^2);
-Kim = a3/b1;
-Kdm = (a3-a2*b1+a1*(b1^2))/(b1^3);
+%mais uma tentativa, agora ajustando todos os ganhos mais precisamente
+Kp3 = 0.2*Kr;
+Ki3 = Kp/(0.5*Tu);
+Kd3 = Kp*Tu/3;
+Cont3 = Kp3 + Ki3/s + Kd3*s;
 
-%daqui, equacionamos o PID:
-Cm1 = Kpm + Kim/s + Kdm*s;
-sys_fb_cm1 = feedback(Cm1*sys, 1);
+sys_cont3 = feedback(Cont3*sys, 1);
+step(sys_cont3, "blue")
 
+%até agora o melhor controlador é o em verde.
+%Ajustando os ganhos arbitráriamente, temos outro
+
+Cont4 = Kp + 0.01*(Ki)/s + 2.3*Kd*s;
+sys_cont4 = feedback(Cont4*sys, 1);
+step(sys_cont4, "yellow")
 %comparação gráfica das duas malhas fechadas
 %PID <- azul
 %controlador ex3 <- vermelho
-figure()
-step(sys_fb_cm1)
+figure(3)
+step(sys_cont4, "blue")
 hold on
 
 A = [0 1 0 ; 0 0 1 ; 0 -25 -5.5];
@@ -112,5 +108,5 @@ MJ=C*inv(-A+B*K)*B;
 J=1/MJ;
 controller=ss(A-B*K, B*J,C,[]);
 step(controller, "red")
-stepinfo(sys_fb_cm1)
+stepinfo(sys_cont4)
 stepinfo(controller)
